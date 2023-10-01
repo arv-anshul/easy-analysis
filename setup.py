@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -10,9 +11,30 @@ __project_repo__ = "https://github.com/arv-anshul/easy-analysis"
 readme_path = Path("README.md")
 requirements_path = Path("requirements.txt")
 
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
+# Copied from https://github.com/cfengine/cf-remote/blob/master/setup.py
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
+package_version = (
+    subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE)
+    .stdout.decode("utf-8")
+    .strip()
+)
+
+if "-" in package_version:
+    # when not on tag, git describe outputs: "1.3.3-22-gdf81228"
+    # pip has gotten strict with version numbers
+    # so change it to: "1.3.3+22.git.gdf81228"
+    # See: https://peps.python.org/pep-0440/#local-version-segments
+    v, i, s = package_version.split("-")
+    package_version = v + "+" + i + ".git." + s
+
+assert "-" not in package_version
+assert "." in package_version
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
+
 setup(
     name="arv-easy_analysis",
-    version="0.0.1",
+    version=package_version,
     description="Data Analysis makes easy.",
     long_description=readme_path.read_text(),
     long_description_content_type="text/markdown",
