@@ -1,0 +1,6 @@
+include README.md
+include requirements.txt
+include LICENSE
+
+recursive-include easy_analysis/assets *
+recursive-include easy_analysis *
