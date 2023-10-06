@@ -42,8 +42,8 @@ setup(
     license="MIT",
     author=__author__,
     author_email=__author_email__,
-    packages=find_packages(where="easy_analysis"),
-    package_dir={"": "easy_analysis"},
+    packages=find_packages(),
+    include_package_data=True,
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.10",
