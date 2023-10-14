@@ -3,8 +3,16 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from easy_analysis.typing import FigSize
 
-def count_plot(df: pd.DataFrame, columns: list[str], title: str = ...):
+
+def count_plot(
+    df: pd.DataFrame,
+    columns: list[str],
+    *,
+    title: str | None = None,
+    figsize: FigSize = (15, 10),
+) -> None:
     """
     Create count plots for one or more categorical columns in a DataFrame.
 
@@ -36,7 +44,7 @@ def count_plot(df: pd.DataFrame, columns: list[str], title: str = ...):
     cols = int(np.ceil(np.sqrt(num_plots)))
     rows = int(np.ceil(num_plots / cols))
 
-    fig, axes = plt.subplots(rows, cols, figsize=(15, 10))
+    fig, axes = plt.subplots(rows, cols, figsize=figsize)
     fig.tight_layout(pad=2)
 
     if isinstance(title, str):
@@ -55,7 +63,9 @@ def agg_plot(
     df: pd.DataFrame,
     x: list[str],
     y: list[str],
+    *,
     agg: list[str] = ["mean"],
+    figsize: FigSize = (15, 10),
 ) -> None:
     """
     Create aggregated bar plots to visualize relationships between variables.
@@ -90,7 +100,7 @@ def agg_plot(
     for method in agg:
         plot_count = 0
 
-        fig, axes = plt.subplots(rows, cols, figsize=(15, 10))
+        fig, axes = plt.subplots(rows, cols, figsize=figsize)
         fig.suptitle(f"Method: {method.title()}", fontsize=15)
 
         for x_col in x:

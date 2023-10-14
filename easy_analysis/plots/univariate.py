@@ -8,6 +8,7 @@ import statsmodels.api as sm
 from scipy import stats
 
 from easy_analysis import _constants as C
+from easy_analysis.typing import FigSize
 
 _QQDist = Literal["norm", "uniform", "log"]
 _WIDTH = 100
@@ -15,13 +16,14 @@ _WIDTH = 100
 
 def univariate_eda(
     data: pd.Series,
-    describe_plot: str = ...,
+    describe_plot: str | None = None,
     *,
     visualize: bool = True,
     compare: bool = False,
     ecdf: bool = False,
     qqplot_kw: dict[Literal["dist"], _QQDist] | Literal[False] = False,
-):
+    figsize: FigSize = (15, 10),
+) -> None:
     """
     Perform Univariate Exploratory Data Analysis (EDA) for a pandas Series.
 
@@ -57,16 +59,20 @@ def univariate_eda(
         print("+" * _WIDTH)
 
     if visualize:
-        visualize_feature(data)
+        visualize_feature(data, figsize=figsize)
     if compare:
-        compare_plot(data)
+        compare_plot(data, figsize=figsize)
     if ecdf:
         ecdf_plot(data)
     if qqplot_kw:
         qqplot(data, **qqplot_kw)
 
 
-def visualize_feature(data: pd.Series) -> None:
+def visualize_feature(
+    data: pd.Series,
+    *,
+    figsize: FigSize = (15, 10),
+) -> None:
     """
     Visualize a pandas Series with boxplots, histograms, and stripplots.
 
@@ -79,13 +85,12 @@ def visualize_feature(data: pd.Series) -> None:
     Returns:
         None
     """
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
 
     fig.suptitle(f"Visualize {data.name}", fontsize=18)
 
     sns.boxplot(x=data, ax=ax1).set_title("Boxplot")
     sns.histplot(data, kde=True, ax=ax2).set_title("Histplot")
-    sns.stripplot(data, ax=ax3).set_title("Stripplot")
 
     plt.tight_layout()
     plt.show()
@@ -133,7 +138,11 @@ def qqplot(data: pd.Series, dist: _QQDist) -> None:
     plt.show()
 
 
-def compare_plot(data: pd.Series) -> None:
+def compare_plot(
+    data: pd.Series,
+    *,
+    figsize: FigSize = (15, 10),
+) -> None:
     """
     Create a compare plot for visualizing the distribution of a pandas Series.
 
@@ -154,7 +163,7 @@ def compare_plot(data: pd.Series) -> None:
         >>> compare_plot(data)
     """
     data_log = np.log1p(data)
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 8))
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=figsize)
 
     fig.suptitle(f"Compare plot of {data.name}", fontsize=18)
 

@@ -1,8 +1,14 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
+from easy_analysis.typing import FigSize
 
-def null_plot(df: pd.DataFrame):
+
+def null_plot(
+    df: pd.DataFrame,
+    *,
+    figsize: FigSize = (12, 4),
+) -> None:
     """
     Plot a bar chart showing the percentage of null values in each column of a DataFrame.
 
@@ -30,7 +36,7 @@ def null_plot(df: pd.DataFrame):
         .mul(100)
         .add(0.5)
         .round()
-        .plot.bar(ylabel="Null Values (in %)", ylim=(0, 100), figsize=(12, 4))
+        .plot.bar(ylabel="Null Values (in %)", ylim=(0, 100), figsize=figsize)
     )
 
     for bar in ax.patches:

@@ -1,0 +1,1 @@
+FigSize = tuple[int, int]

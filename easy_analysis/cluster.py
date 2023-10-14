@@ -1,5 +1,5 @@
 import importlib
-from typing import Literal, TypeAlias
+from typing import Literal
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 
 from easy_analysis.core import _errors
 
-ScalerType: TypeAlias = Literal["StandardScaler", "RobustScaler", "MinMaxScaler"]
+ScalerType = Literal["StandardScaler", "RobustScaler", "MinMaxScaler"]
 
 
 class ClusterAnalyzer:
@@ -60,7 +60,7 @@ class ClusterAnalyzer:
         scaler: StandardScaler = getattr(preprocessing_pkg, scaler_type)()
         return scaler.fit_transform(df)
 
-    def find_optimal_clusters(self, cluster_range: range = ...) -> list[float]:
+    def find_optimal_clusters(self, cluster_range: range | None = None) -> list[float]:
         """
         Find the optimal number of clusters using the Elbow Method.
 
@@ -86,8 +86,8 @@ class ClusterAnalyzer:
     def plot_clusters(
         wcss: list[float],
         *,
-        cluster_range: range = ...,
-        title: str = ...,
+        cluster_range: range | None = None,
+        title: str | None = None,
     ) -> None:
         """
         Plot the Elbow Method results. Use (WCSS) from `find_optimal_clusters` method.
